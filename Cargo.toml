@@ -4,3 +4,6 @@ version = "0.1.0"
 authors = ["Andrew Eggleston <egglestonandrew927@gmail.com>"]
 
 [dependencies]
+lettre = "0.8"
+lettre_email = "0.8"
+notify = "4.0.0"
