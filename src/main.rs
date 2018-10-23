@@ -1,10 +1,9 @@
-extern crate lettre;
+//extern crate lettre;
 extern crate notify;
 
 use notify::{RecommendedWatcher, Watcher};
 use std::sync::mpsc::channel;
 use std::time::Duration;
-
 
 fn watch() -> notify::Result<()> {
     let (tx, rx) = channel();
