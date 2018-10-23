@@ -11,6 +11,8 @@ fn watch() -> notify::Result<()> {
 
     let mut watcher: RecommendedWatcher = try!(Watcher::new(tx, Duration::from_secs(1)));
 
+    println!("Started!");
+
     try!(watcher.watch("/sys/devices/w1_bus_master1/w1_master_slaves", RecursiveMode::Recursive));
 
     loop {
