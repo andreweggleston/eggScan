@@ -1,6 +1,6 @@
 //extern crate lettre;
 extern crate notify;
-extern crate request;
+extern crate reqwest;
 
 use notify::{Watcher, RawEvent, PollWatcher};
 use std::sync::mpsc::channel;
