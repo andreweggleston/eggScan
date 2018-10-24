@@ -1,5 +1,6 @@
 //extern crate lettre;
 extern crate notify;
+extern crate request;
 
 use notify::{Watcher, RawEvent, PollWatcher};
 use std::sync::mpsc::channel;
@@ -29,7 +30,7 @@ fn watch() -> notify::Result<()> {
     }
 }
 
-fn runScan(){
+fn runScan() {
     let mut f = File::open("/sys/devices/w1_bus_master1/w1_master_slaves").unwrap();
     let mut contents = String::new();
     f.read_to_string(&mut contents).unwrap();
@@ -38,8 +39,15 @@ fn runScan(){
     }
 }
 
-fn getUsername(username: String){
-    println!("Sending get for ibutton {}", username);    
+fn getUsername(username: String) -> reqwest::Result<()> {
+    println!("Sending get for ibutton {}", username);
+    let mut res = reqwest::get(format!("http://ibutton-translator-ibutton-translator.a.csh.rit.edu/ibutton={}", username))?;
+    let mut body = String::new();
+    res.read_to_string(&mut body)?;
+
+    println!("Body: {}", body);
+
+    Ok(())
 //send get request
 }
 
