@@ -41,9 +41,9 @@ fn runScan() {
 
 fn getUsername(username: String) -> reqwest::Result<()> {
     println!("Sending get for ibutton {}", username);
-    let mut res = reqwest::get(format!("http://ibutton-translator-ibutton-translator.a.csh.rit.edu/ibutton={}", username))?;
+    let mut res = reqwest::get(&format!("http://ibutton-translator-ibutton-translator.a.csh.rit.edu/?ibutton={}", username))?;
     let mut body = String::new();
-    res.read_to_string(&mut body)?;
+    res.read_to_string(&mut body).expect("should read response string");
 
     println!("Body: {}", body);
 
