@@ -74,7 +74,7 @@ fn get_username(username: String) -> reqwest::Result<()> {
         .arg("-y").arg("279").arg(">").arg("/scans/scan.jpg");//scanimage --resolution 300 -x 215 -y 279 > /scans/TMP/
     sleep(Duration::new(45, 0));
     send_email(deserialized.username);
-    Ok(())x
+    Ok(())
 }
 
 fn send_email(username: String) {
@@ -88,7 +88,7 @@ fn send_email(username: String) {
     emailbuilder.attachment(&Path::new("/scans/scan.jpg"), None, &mime);
     let mut email = &emailbuilder.build().expect("Should be a valid email");
     //let mut sendableemail: SendableEmail<Email> = email.into()
-    let mut mailer: lettre::sendmail::EmailTransport<Email, SendmailResult> = &SendmailTransport::new();
+    let mut mailer: &lettre::sendmail::EmailTransport<Email, SendmailResult> = &SendmailTransport::new();
     mailer.send(sendableemail);
 }
 
