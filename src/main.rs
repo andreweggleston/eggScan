@@ -65,7 +65,7 @@ fn run_scan() {
 
 fn get_username(username: String) -> reqwest::Result<()> {
     println!("Sending get for ibutton {}", username);
-    let mut res = reqwest::get(&format!("http://ibutton-translator-ibutton-translator.a.csh.rit.edu/?ibutton={}", username))?;
+    let mut res = reqwest::get(&format!("localhost:5000/?ibutton={}", username))?;
     let mut body = String::new();
     res.read_to_string(&mut body).expect("should read response string");
     let deserialized: IButtonTranslatorResponse = serde_json::from_str(&body).unwrap();
@@ -74,7 +74,7 @@ fn get_username(username: String) -> reqwest::Result<()> {
         .arg("-y").arg("279").arg(">").arg("/scans/scan.jpg");//scanimage --resolution 300 -x 215 -y 279 > /scans/TMP/
     sleep(Duration::new(45, 0));
     send_email(deserialized.username);
-    Ok(())
+    Ok(())x
 }
 
 fn send_email(username: String) {
@@ -88,7 +88,7 @@ fn send_email(username: String) {
     emailbuilder.attachment(&Path::new("/scans/scan.jpg"), None, &mime);
     let mut email = &emailbuilder.build().expect("Should be a valid email");
     //let mut sendableemail: SendableEmail<Email> = email.into()
-    let mut mailer: lettre::sendmail::EmailTransport<Email, SendmailResult> = SendmailTransport::new();
+    let mut mailer: lettre::sendmail::EmailTransport<Email, SendmailResult> = &SendmailTransport::new();
     mailer.send(sendableemail);
 }
 
