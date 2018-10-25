@@ -25,6 +25,7 @@ use lettre::SendableEmail;
 use std::thread::sleep;
 use std::process::Command;
 use std::path::Path;
+use lettre::sendmail::error::SendmailResult;
 
 #[derive(Deserialize)]
 struct IButtonTranslatorResponse {
@@ -87,7 +88,7 @@ fn send_email(username: String) {
     emailbuilder.attachment(&Path::new("/scans/scan.jpg"), None, &mime);
     let mut email = &emailbuilder.build().expect("Should be a valid email");
     //let mut sendableemail: SendableEmail<Email> = email.into()
-    let mut mailer: lettre::sendmail::EmailTransport = SendmailTransport::new();
+    let mut mailer: lettre::sendmail::EmailTransport<Email, SendmailResult> = SendmailTransport::new();
     mailer.send(sendableemail);
 }
 
