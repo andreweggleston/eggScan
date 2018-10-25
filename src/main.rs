@@ -2,12 +2,25 @@
 extern crate notify;
 extern crate reqwest;
 
+#[macro_use]
+extern crate serde_derive;
+
+extern crate serde;
+extern crate serde_json;
+
 use notify::{Watcher, RawEvent, PollWatcher};
 use std::sync::mpsc::channel;
 use std::time::Duration;
 use std::fs::File;
 use std::io::prelude::*;
 use notify::RecursiveMode;
+
+
+#[derive(DeSerialize)]
+struct IButtonTranslatorResponse {
+    username: String,
+}
+
 
 fn watch() -> notify::Result<()> {
     let (tx, rx) = channel();
@@ -44,11 +57,10 @@ fn getUsername(username: String) -> reqwest::Result<()> {
     let mut res = reqwest::get(&format!("http://ibutton-translator-ibutton-translator.a.csh.rit.edu/?ibutton={}", username))?;
     let mut body = String::new();
     res.read_to_string(&mut body).expect("should read response string");
-
-    println!("Body: {}", body);
+    let deseralized: IButtonTranslatorResponse = serde_json::from_str(&body).unwrap();
+    println!("Username: {}", body.username);
 
     Ok(())
-//send get request
 }
 
 fn main() {
