@@ -90,7 +90,7 @@ fn send_email(username: String) {
     let mut email = &emailbuilder.build().expect("Should be a valid email");
     let mut sendableemail: SendableEmail<Email> = email.into();
     let mut mailer = &SendmailTransport::new();
-    mailer.send(sendableemail);
+    mailer.send(&sendableemail);
 }
 
 fn main() {
