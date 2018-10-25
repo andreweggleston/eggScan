@@ -11,20 +11,21 @@ extern crate serde_json;
 extern crate lettre_email;
 extern crate lettre;
 
+extern crate mime;
+
 use notify::{Watcher, RawEvent, PollWatcher};
 use std::sync::mpsc::channel;
 use std::time::{Duration, SystemTime};
 use std::fs::File;
 use std::io::prelude::*;
 use notify::RecursiveMode;
-use lettre_email::EmailBuilder;
+use lettre_email::{Mailbox, EmailBuilder};
 use lettre::SendmailTransport;
+use lettre::SendableEmail;
 use std::thread::sleep;
 use std::process::Command;
 use std::path::Path;
-use mime;
 use lettre::SendmailTransport;
-use lettre::SendableEmail;
 
 #[derive(Deserialize)]
 struct IButtonTranslatorResponse {
@@ -67,7 +68,7 @@ fn get_username(username: String) -> reqwest::Result<()> {
     let mut res = reqwest::get(&format!("http://ibutton-translator-ibutton-translator.a.csh.rit.edu/?ibutton={}", username))?;
     let mut body = String::new();
     res.read_to_string(&mut body).expect("should read response string");
-    let deseralized: IButtonTranslatorResponse = serde_json::from_str(&body).unwrap();
+    let deserialized: IButtonTranslatorResponse = serde_json::from_str(&body).unwrap();
     println!("Username: {}", deseralized.username);
     Command::new("scanimage").arg("--resolution").arg("300").arg("-x").arg("215")
         .arg("-y").arg("279").arg(">").arg("/scans/scan.jpg");//scanimage --resolution 300 -x 215 -y 279 > /scans/TMP/
@@ -78,15 +79,15 @@ fn get_username(username: String) -> reqwest::Result<()> {
 
 fn send_email(username: String) {
     let mut emailbuilder = EmailBuilder::new();
-    emailbuilder.add_to(&format!("{}@csh.rit.edu", username));
-    emailbuilder.add_from(&format!("eggScan@csh.rit.edu"));
-    emailbuilder.body(&"Your scanned file is attached!");
-    emailbuilder.sender(&format!("eggScan@csh.rit.edu"));
-    emailbuilder.subject(&format!("Scan from {}", SystemTime::now));
-    let mime = mime::JPEG;
-    emailbuilder.attachment(&Path::new("/scans/scan.jpg"), None, mime);
+    emailbuilder.to(MailBox::new(format!("{}@csh.rit.edu", username));
+    emailbuilder.from(Mailbox::new(format!("eggScan@csh.rit.edu"));
+    emailbuilder.body("Your scanned file is attached!");
+    emailbuilder.sender(Mailbox::new(format!("eggScan@csh.rit.edu")));
+    emailbuilder.subject(format!("Scan from {:?}", SystemTime::now));
+    let mime = "image/jpeg".parse::<mime::Mime>().unwrap();
+    emailbuilder.attachment(&Path::new("/scans/scan.jpg"), None, &mime);
     let mut email = emailbuilder.build().expect("Should be a valid email");
-    let mut email: SendableEmail() = email.into();
+    let mut email = email.into();
     let mut mailer: SendmailTransport = SendmailTransport::new;
     mailer.send(email);
 
