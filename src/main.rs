@@ -86,8 +86,8 @@ fn send_email(username: String) {
     let mime = "image/jpeg".parse::<mime::Mime>().unwrap();
     emailbuilder.attachment(&Path::new("/scans/scan.jpg"), None, &mime);
     let mut email = emailbuilder.build().expect("Should be a valid email");
-    let mut email= email.into();
-    let mut mailer: SendmailTransport = SendmailTransport::new();
+    let mut email: lettre::SendableEmail<Email> = email.into();
+    let mut mailer: lettre::sendmail::SendmailTransport = SendmailTransport::new();
     mailer.send(email);
 }
 
