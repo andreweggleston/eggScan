@@ -16,7 +16,7 @@ use std::io::prelude::*;
 use notify::RecursiveMode;
 
 
-#[derive(DeSerialize)]
+#[derive(Deserialize)]
 struct IButtonTranslatorResponse {
     username: String,
 }
