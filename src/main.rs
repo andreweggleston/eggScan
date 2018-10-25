@@ -58,7 +58,7 @@ fn getUsername(username: String) -> reqwest::Result<()> {
     let mut body = String::new();
     res.read_to_string(&mut body).expect("should read response string");
     let deseralized: IButtonTranslatorResponse = serde_json::from_str(&body).unwrap();
-    println!("Username: {}", body.username);
+    println!("Username: {}", deseralized.username);
 
     Ok(())
 }
